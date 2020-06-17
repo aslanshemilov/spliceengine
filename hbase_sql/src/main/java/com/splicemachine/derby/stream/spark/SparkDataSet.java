@@ -687,9 +687,12 @@ public class SparkDataSet<V> implements DataSet<V> {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public DataSet<V> join(OperationContext context, DataSet<V> rightDataSet, JoinType joinType, boolean isBroadcast) throws StandardException {
+        StructType structType = context.getOperation().getLeftOperation().schema();
+        if (structType == null)
+            context.getOperation().getLeftOperation().getExecRowDefinition().schema();
         Dataset<Row> leftDF = SpliceSpark.getSession().createDataFrame(
                 rdd.map(new LocatedRowToRowFunction()),
-                        context.getOperation().getLeftOperation().getExecRowDefinition().schema());
+                        structType);
         OperationContext<SpliceOperation> leftContext = EngineDriver.driver().processorFactory().distributedProcessor().createOperationContext(context.getOperation().getLeftOperation());
 
         return new NativeSparkDataSet(leftDF, leftContext).join(context, rightDataSet, joinType, isBroadcast);

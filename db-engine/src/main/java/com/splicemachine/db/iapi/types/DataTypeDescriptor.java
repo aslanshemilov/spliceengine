@@ -45,6 +45,7 @@ import com.splicemachine.db.iapi.services.loader.ClassFactory;
 import com.splicemachine.db.iapi.services.loader.ClassInspector;
 import com.splicemachine.db.iapi.services.sanity.SanityManager;
 import com.splicemachine.db.iapi.sql.conn.ConnectionUtil;
+import org.apache.spark.sql.types.StructField;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -1751,6 +1752,10 @@ public class DataTypeDescriptor implements Formatable{
 
     public DataValueDescriptor getDefault() throws StandardException {
         return typeId.getDefault();
+    }
+
+    public StructField getStructField(String columnName) {
+        return typeId.getStructField(columnName, getPrecision(), getScale());
     }
 }
 
