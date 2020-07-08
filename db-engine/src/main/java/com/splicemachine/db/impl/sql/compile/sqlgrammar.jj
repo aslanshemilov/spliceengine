@@ -4788,24 +4788,18 @@ declareTemporaryTableDeclaration() throws StandardException :
     TableElementList tableElementList;
     Object[] declareTableClauses = new Object[3];
     Token ifTok = null;
-    Token notTok = null;
-    Token existsTok = null;
     Token ifTok2 = null;
-    Token notTok2 = null;
-    Token existsTok2 = null;
 }
 {
-    <DECLARE> <GLOBAL> <TEMPORARY> <TABLE> [ ifTok = <IF> notTok = <NOT> existsTok = <EXISTS> ] tableName = qualifiedName(Limits.MAX_IDENTIFIER_LENGTH) [ ifTok2 = <IF> notTok2 = <NOT> existsTok2 = <EXISTS> ]
+    <DECLARE> <GLOBAL> <TEMPORARY> <TABLE> [ ifTok = <IF> <NOT> <EXISTS> ] tableName = qualifiedName(Limits.MAX_IDENTIFIER_LENGTH) [ ifTok2 = <IF> <NOT> <EXISTS> ]
         tableElementList = tableElementList()
         ( declareTableClause(declareTableClauses) ) *
     {
-        boolean ifNotExists = ifTok != null && notTok != null && existsTok != null;
-        boolean ifNotExists2 = ifTok2 != null && notTok2 != null && existsTok2 != null;
+        boolean ifNotExists = ifTok != null || ifTok2 != null;
 
         return verifySyntaxAndCreate(declareTableClauses, tableName, tableElementList,
-                                     ((ifNotExists || ifNotExists2) ?
-                                         new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
-                                         new Integer(StatementType.CREATE_DEFAULT)));
+                                     (ifNotExists ? new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
+                                                    new Integer(StatementType.CREATE_DEFAULT)));
     }
 }
 
@@ -4826,24 +4820,18 @@ createTemporaryTableDeclaration() throws StandardException :
     TableElementList tableElementList;
     Object[] declareTableClauses = new Object[3];
     Token ifTok = null;
-    Token notTok = null;
-    Token existsTok = null;
     Token ifTok2 = null;
-    Token notTok2 = null;
-    Token existsTok2 = null;
 }
 {
-    ( <LOCAL>  | <GLOBAL> ) <TEMPORARY> <TABLE> [ ifTok = <IF> notTok = <NOT> existsTok = <EXISTS> ] tableName = qualifiedName(Limits.MAX_IDENTIFIER_LENGTH) [ ifTok2 = <IF> notTok2 = <NOT> existsTok2 = <EXISTS> ]
+    ( <LOCAL>  | <GLOBAL> ) <TEMPORARY> <TABLE> [ ifTok = <IF> <NOT> <EXISTS> ] tableName = qualifiedName(Limits.MAX_IDENTIFIER_LENGTH) [ ifTok2 = <IF> <NOT> <EXISTS> ]
         tableElementList = tableElementList()
         ( declareTableClause(declareTableClauses) ) *
     {
-        boolean ifNotExists = ifTok != null && notTok != null && existsTok != null;
-        boolean ifNotExists2 = ifTok2 != null && notTok2 != null && existsTok2 != null;
+        boolean ifNotExists = ifTok != null || ifTok2 != null;
 
         return verifySyntaxAndCreate(declareTableClauses, tableName, tableElementList,
-                                     ((ifNotExists || ifNotExists2) ?
-                                         new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
-                                         new Integer(StatementType.CREATE_DEFAULT)));
+                                     (ifNotExists ? new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
+                                                    new Integer(StatementType.CREATE_DEFAULT)));
     }
 }
 
@@ -12620,15 +12608,11 @@ tableDefinition() throws StandardException :
     ValueNode   dateFormat = null;
     ValueNode   timeFormat = null;
     Token ifTok = null;
-    Token notTok = null;
-    Token existsTok = null;
     Token ifTok2 = null;
-    Token notTok2 = null;
-    Token existsTok2 = null;
 }
 {
     [ isExternal = isExternal() ]
-    <TABLE> [ ifTok = <IF> notTok = <NOT> existsTok = <EXISTS> ] tableName = qualifiedName(Limits.MAX_IDENTIFIER_LENGTH) [ ifTok2 = <IF> notTok2 = <NOT> existsTok2 = <EXISTS> ]
+    <TABLE> [ ifTok = <IF> <NOT> <EXISTS> ] tableName = qualifiedName(Limits.MAX_IDENTIFIER_LENGTH) [ ifTok2 = <IF> <NOT> <EXISTS> ]
             // Lookahead needed to choose between
             // tableElementList and tableColumnList
     (        LOOKAHEAD({getToken(1).kind == LEFT_PAREN &&
@@ -12648,15 +12632,13 @@ tableDefinition() throws StandardException :
                       validateParameters(isExternal, storageFormat, terminationChar, escapedByChar,
                                 linesTerminatedByChar, location,compression, partitionedResultColumns, tableElementList);
 
-                      boolean ifNotExists = ifTok != null && notTok != null && existsTok != null;
-                      boolean ifNotExists2 = ifTok2 != null && notTok2 != null && existsTok2 != null;
+                      boolean ifNotExists = ifTok != null || ifTok2 != null;
 
                           return (StatementNode) nodeFactory.getNode(
                                               C_NodeTypes.CREATE_TABLE_NODE,
                                               tableName,
-                                              ((ifNotExists || ifNotExists2) ?
-                                                  new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
-                                                  new Integer(StatementType.CREATE_DEFAULT)),
+                                              (ifNotExists ? new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
+                                                             new Integer(StatementType.CREATE_DEFAULT)),
                                               tableElementList,
                                               properties,
                                               new Character(lockGranularity),
@@ -12691,15 +12673,13 @@ tableDefinition() throws StandardException :
             validateParameters(isExternal, storageFormat, terminationChar, escapedByChar,
                         linesTerminatedByChar, location,compression, partitionedResultColumns, tableElementList);
 
-            ifNotExists = ifTok != null && notTok != null && existsTok != null;
-            ifNotExists2 = ifTok2 != null && notTok2 != null && existsTok2 != null;
+            ifNotExists = ifTok != null || ifTok2 != null;
 
                 return (StatementNode) nodeFactory.getNode(
                                         C_NodeTypes.CREATE_TABLE_NODE,
                                         tableName,
-                                        ((ifNotExists || ifNotExists2) ?
-                                            new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
-                                            new Integer(StatementType.CREATE_DEFAULT)),
+                                        (ifNotExists ? new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
+                                                       new Integer(StatementType.CREATE_DEFAULT)),
                                         tableElementList,
                                         properties,
                                         new Character(lockGranularity),
@@ -12757,15 +12737,13 @@ tableDefinition() throws StandardException :
                 validateParameters(isExternal, storageFormat, terminationChar, escapedByChar,
                 linesTerminatedByChar, location, compression, partitionedResultColumns, tableElementList);
 
-                boolean ifNotExists = ifTok != null && notTok != null && existsTok != null;
-                boolean ifNotExists2 = ifTok2 != null && notTok2 != null && existsTok2 != null;
+                boolean ifNotExists = ifTok != null || ifTok2 != null;
 
                 StatementNode node = (StatementNode)nodeFactory.getNode(
                                         C_NodeTypes.CREATE_TABLE_NODE,
                                         tableName,
-                                        ((ifNotExists || ifNotExists2) ?
-                                            new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
-                                            new Integer(StatementType.CREATE_DEFAULT)),
+                                        (ifNotExists ? new Integer(StatementType.CREATE_IF_NOT_EXISTS) :
+                                                       new Integer(StatementType.CREATE_DEFAULT)),
                                         resultColumns,
                                         queryExpression,
                                         isExternal,

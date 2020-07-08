@@ -26,8 +26,6 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.splicemachine.test_tools.Rows.rows;
-
 /**
  * Created by zli on 7/6/20.
  * DB-9764
@@ -89,11 +87,11 @@ public class CreateTableIT extends SpliceUnitTest {
             Assert.assertTrue(tableName + " has not been created", s.contains(tableName));
 
             // creating a table with an existing name using "if not exists" returns a warning
-            String sqlTexts[] =
-                    {"create %s table if not exists %s.%s (c int)",
-                            "create %s table %s.%s if not exists (c int)",
-                            "create %s table if not exists %s.%s if not exists (c int)"
-                    };
+            String sqlTexts[] = {
+                    "create %s table if not exists %s.%s (c int)",
+                    "create %s table %s.%s if not exists (c int)",
+                    "create %s table if not exists %s.%s if not exists (c int)"
+            };
             try {
                 for (String sqlText : sqlTexts) {
                     methodWatcher.executeUpdate(appendStorage(String.format(sqlText, tableType, schema.schemaName, tableName), tableType));
