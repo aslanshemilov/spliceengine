@@ -362,11 +362,11 @@ public class CreateTableNode extends DDLStatementNode
         TableDescriptor td = getTableDescriptor( objectName.tableName, sd );
         if (td != null && createBehavior == StatementType.CREATE_IF_NOT_EXISTS)
         {
-			StandardException e = StandardException.newException(SQLState.LANG_OBJECT_ALREADY_EXISTS,
-					statementToString(), objectName.tableName);
-			e.setSeverity(ExceptionSeverity.WARNING_SEVERITY);
-			throw e;
-		}
+        	StandardException e = StandardException.newException(SQLState.LANG_OBJECT_ALREADY_EXISTS_IN_OBJECT,
+					"table", objectName.tableName, "schema", sd.getSchemaName());
+        	e.setSeverity(ExceptionSeverity.WARNING_SEVERITY);
+        	throw e;
+        }
 
 		if (queryExpression != null)
 		{
@@ -671,6 +671,7 @@ public class CreateTableNode extends DDLStatementNode
                     colInfos,
                     conActions,
                     properties,
+                    createBehavior,
                     lockGranularity,
                     onCommitDeleteRows,
                     onRollbackDeleteRows,
