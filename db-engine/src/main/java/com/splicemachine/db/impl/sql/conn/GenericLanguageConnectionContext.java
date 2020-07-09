@@ -1341,10 +1341,6 @@ public class GenericLanguageConnectionContext extends ContextImpl implements Lan
     public PreparedStatement lookupStatement(GenericStatement statement) throws StandardException{
         GenericStorablePreparedStatement ps = getDataDictionary().getDataDictionaryCache().statementCacheFind(statement);
         if (ps==null) {
-            String sqlText = statement.getSource().toUpperCase();
-            if ((sqlText.startsWith("CREATE") || sqlText.startsWith("DECLARE")) && sqlText.contains("IF NOT EXISTS")){
-                return null;
-            }
             ps = new GenericStorablePreparedStatement(statement);
             getDataDictionary().getDataDictionaryCache().statementCacheAdd(statement,ps);
         }
