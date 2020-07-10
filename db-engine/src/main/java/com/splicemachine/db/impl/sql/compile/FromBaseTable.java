@@ -672,15 +672,6 @@ public class FromBaseTable extends FromTable {
                     throw StandardException.newException(SQLState.LANG_INVALID_FORCED_SPARK, key, value);
                 }
             }
-            else if (key.equals("pin")) {
-                try {
-                    pin = Boolean.parseBoolean(StringUtil.SQLToUpperCase(value));
-                    dataSetProcessorType = dataSetProcessorType.combine(DataSetProcessorType.FORCED_SPARK);
-                    tableProperties.setProperty("index","null");
-                } catch (Exception pinE) {
-                    throw StandardException.newException(SQLState.LANG_INVALID_FORCED_SPARK, key, value); // TODO Fix Error message - JL
-                }
-            }
             else if (key.equals("skipStats")) {
                 try {
                     boolean bValue = Boolean.parseBoolean(StringUtil.SQLToUpperCase(value));
@@ -2345,7 +2336,6 @@ public class FromBaseTable extends FromTable {
                 ap.getOptimizer().getMaxMemoryPerTable(),
                 multiProbing,
                 tableDescriptor.getVersion(),
-                pin,
                 splits,
                 tableDescriptor.getDelimited(),
                 tableDescriptor.getEscaped(),

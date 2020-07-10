@@ -123,13 +123,6 @@ public class SpliceSystemProcedures extends DefaultSystemProcedureGenerator {
                 //
 
                 if (key.equals(sysUUID)) {
-                    Procedure refreshExternalTable = Procedure.newBuilder().name("SYSCS_REFRESH_EXTERNAL_TABLE")
-                            .numOutputParams(0).numResultSets(0).ownerClass(ExternalTableSystemProcedures.class.getCanonicalName())
-                            .varchar("schema", 32672)
-                            .varchar("table", 32672)
-                            .build();
-                    procedures.add(refreshExternalTable);
-
         			/*
         			 * Add a system procedure to enable splitting tables once data is loaded.
         			 *

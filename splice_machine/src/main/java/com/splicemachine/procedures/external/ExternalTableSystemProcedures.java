@@ -38,43 +38,4 @@ public class ExternalTableSystemProcedures {
 
     private static Logger LOG = Logger.getLogger(ExternalTableSystemProcedures.class);
 
-    /**
-     * This will refresh the schema of th external file. This is useful when some modify the file
-     * outside of Splice.
-     * It will grab the schema and the table descriptor, then get the file location and will create
-     * a job for spark that will force the schema to refresh.
-     *
-     * @param schema
-     * @param table
-     * @throws StandardException
-     * @throws SQLException
-     */
-
-    public static void SYSCS_REFRESH_EXTERNAL_TABLE(String schema, String table) throws StandardException, SQLException {
-        Connection conn = SpliceAdmin.getDefaultConn();
-        LanguageConnectionContext lcc = conn.unwrap(EmbedConnection.class).getLanguageConnection();
-        TransactionController tc=lcc.getTransactionExecute();
-        try {
-            DataDictionary data_dictionary=lcc.getDataDictionary();
-            SchemaDescriptor sd=
-                    data_dictionary.getSchemaDescriptor(schema,tc,true);
-            TableDescriptor td=
-                    data_dictionary.getTableDescriptor(table,sd,tc);
-
-            if(td ==null)
-                throw StandardException.newException(SQLState.LANG_TABLE_NOT_FOUND, schema +"." + table);
-
-            if(!td.isExternal())
-                throw StandardException.newException(SQLState.NOT_AN_EXTERNAL_TABLE, td.getName());
-
-            String jobGroup = lcc.getSessionUserId() + " <" + tc.getTransactionIdString() +">";
-
-            EngineDriver.driver().getOlapClient().execute(new DistributedRefreshExternalTableSchemaJob(jobGroup, td.getLocation()));
-
-        }catch (Throwable t){
-            throw StandardException.plainWrapException(t);
-
-        }
-    }
-
 }

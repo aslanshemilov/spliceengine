@@ -190,7 +190,6 @@ public class TableScanOperation extends ScanOperation{
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException{
         super.readExternal(in);
-        pin = in.readBoolean();
         tableName=in.readUTF();
         tableDisplayName=in.readUTF();
         tableNameBytes=Bytes.toBytes(tableName);
@@ -208,7 +207,6 @@ public class TableScanOperation extends ScanOperation{
     @Override
     public void writeExternal(ObjectOutput out) throws IOException{
         super.writeExternal(out);
-        out.writeBoolean(pin);
         out.writeUTF(tableName);
         out.writeUTF(tableDisplayName);
         out.writeInt(indexColItem);
@@ -363,7 +361,7 @@ public class TableScanOperation extends ScanOperation{
                 .keyDecodingMap(getKeyDecodingMap())
                 .rowDecodingMap(getRowDecodingMap())
                 .baseColumnMap(baseColumnMap)
-                .pin(pin)
+                .pin(false)
                 .delimited(delimited)
                 .escaped(escaped)
                 .lines(lines)

@@ -136,25 +136,11 @@ public class ControlOnlyDataSetProcessorFactory implements DataSetProcessorFacto
         }
 
         @Override
-        public void refreshTable(String location) {
-            if (LOG.isTraceEnabled())
-                SpliceLogUtils.trace(LOG, "DistributedWrapper#refreshTable()");
-        }
-
-        @Override
         public StructType getExternalFileSchema(String storedAs, String location, boolean mergeSchema) {
             if (LOG.isTraceEnabled())
             SpliceLogUtils.trace(LOG, "DistributedWrapper#getExternalFileSchema()");
             //no-op
             return null;
-        }
-
-        @Override
-        public Boolean isCached(long conglomerateId) throws StandardException {
-            if (LOG.isTraceEnabled())
-                SpliceLogUtils.trace(LOG, "DistributedWrapper#isCached()");
-            //no-op
-            return false;
         }
 
         // Operations specific to native spark explains

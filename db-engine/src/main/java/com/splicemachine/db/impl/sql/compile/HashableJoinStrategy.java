@@ -332,7 +332,7 @@ public abstract class HashableJoinStrategy extends BaseJoinStrategy {
             boolean tableLocked,
             int isolationLevel,
             int maxMemoryPerTable,
-            boolean genInListVals, String tableVersion, boolean pin,
+            boolean genInListVals, String tableVersion,
             int splits,
             String delimited,
             String escaped,
@@ -340,7 +340,7 @@ public abstract class HashableJoinStrategy extends BaseJoinStrategy {
             String storedAs,
             String location,
             int partitionRefItem
-            ) throws StandardException {
+    ) throws StandardException {
         ExpressionClassBuilder acb = (ExpressionClassBuilder) acbi;
         int numArgs;
 		/* If we're going to generate a list of IN-values for index probing

@@ -185,21 +185,6 @@ public abstract class ForwardingDataSetProcessor implements DataSetProcessor{
     }
 
     @Override
-    public <V> DataSet<V> readPinnedTable(long conglomerateId, int[] baseColumnMap, String location, OperationContext context, Qualifier[][] qualifiers, DataValueDescriptor probeValue, ExecRow execRow) throws StandardException {
-        return delegate.readPinnedTable(conglomerateId, baseColumnMap, location, context, qualifiers, probeValue, execRow);
-    }
-
-    @Override
-    public void dropPinnedTable(long conglomerateId) throws StandardException {
-        delegate.dropPinnedTable(conglomerateId);
-    }
-
-    @Override
-    public Boolean isCached(long conglomerateId) throws StandardException {
-        return delegate.isCached(conglomerateId);
-    }
-
-    @Override
     public TableChecker getTableChecker(String schemaName, String tableName, DataSet tableDataSet,
                                         KeyHashDecoder decoder, ExecRow key, TxnView txn,  boolean fix,
                                         int[] baseColumnMap, boolean isSystemChecker) {

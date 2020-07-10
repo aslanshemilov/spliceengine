@@ -264,8 +264,7 @@ public class TableDescriptor extends TupleDescriptor implements UniqueSQLObjectD
                            String lines,
                            String storedAs,
                            String location,
-                           String compression,
-                           boolean isPinned,
+                           String compression
                            boolean purgeDeletedRows
     ){
         super(dataDictionary);
@@ -286,7 +285,7 @@ public class TableDescriptor extends TupleDescriptor implements UniqueSQLObjectD
         this.location = location;
         this.compression = compression;
         // NOT USED ANYMORE, for backward compatibility only
-        this.isPinned = isPinned;
+        this.isPinned = false;
         this.purgeDeletedRows = purgeDeletedRows;
     }
 

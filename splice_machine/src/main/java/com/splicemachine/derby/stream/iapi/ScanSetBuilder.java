@@ -201,14 +201,6 @@ public interface ScanSetBuilder<V>{
 
     /**
      *
-     * Retrieve whether you should go against the in-memory (pin) version of the data.
-     *
-     * @return
-     */
-    boolean getPin();
-
-    /**
-     *
      * Return how the columns are delimitted.
      *
      * @return

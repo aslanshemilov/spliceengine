@@ -186,31 +186,6 @@ public interface DataSetProcessor {
      * @return
      */
     StructType getExternalFileSchema(String storedAs, String location, boolean mergeSchema) throws StandardException;
-    /**
-     * This is used when someone modify the external table outside of Splice.
-     * One need to refresh the schema table if the underlying file have been modify outside Splice because
-     * Splice has now way to know when this happen
-     * This method is used with a procedure look at SYSCS_UTIL.SYSCS_REFRESH_EXTERNAL_TABLE
-     * @param location
-     */
-    void refreshTable(String location);
-    /**
-     *
-     * Reads in-memory version given the scan variables.  The qualifiers are applied to the in-memory version.
-     *
-     * @param conglomerateId
-     * @param baseColumnMap
-     * @param location
-     * @param context
-     * @param qualifiers
-     * @param probeValue
-     * @param execRow
-     * @param <V>
-     * @return
-     * @throws StandardException
-     */
-    <V> DataSet<V> readPinnedTable(long conglomerateId, int[] baseColumnMap, String location,
-                                   OperationContext context, Qualifier[][] qualifiers, DataValueDescriptor probeValue, ExecRow execRow) throws StandardException ;
 
     /**
      *
@@ -250,24 +225,6 @@ public interface DataSetProcessor {
     <V> DataSet<ExecRow> readTextFile(SpliceOperation op, String location, String characterDelimiter, String columnDelimiter, int[] baseColumnMap,
                                          OperationContext context, Qualifier[][] qualifiers, DataValueDescriptor probeValue, ExecRow execRow,
                                          boolean useSample, double sampleFraction) throws StandardException;
-
-    /**
-     *
-     * Drops the in-memory version of the table.
-     *
-     * @param conglomerateId
-     * @throws StandardException
-     */
-    void dropPinnedTable(long conglomerateId) throws StandardException;
-
-
-    /**
-     *  Returns true if the table is currently cached in-memory.
-     * @param conglomerateId
-     * @throws StandardException
-     */
-
-    Boolean isCached(long conglomerateId) throws StandardException;
 
     TableChecker getTableChecker(String schemaName, String tableName, DataSet tableDataSet, KeyHashDecoder decoder,
                                  ExecRow key, TxnView txn, boolean fix, int[] baseColumnMap, boolean isSystemTable);

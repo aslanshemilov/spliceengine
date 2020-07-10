@@ -96,7 +96,6 @@ public final class InsertNode extends DMLModStatementNode {
     public static final String SKIP_CONFLICT_DETECTION = "skipConflictDetection";
     public static final String SKIP_WAL = "skipWAL";
     public static final String INSERT = "INSERT";
-    public static final String PIN = "pin";
     public static final String BULK_IMPORT_DIRECTORY = "bulkImportDirectory";
     public static final String SAMPLING_ONLY = "samplingOnly";
     public static final String OUTPUT_KEYS_ONLY = "outputKeysOnly";
@@ -744,10 +743,6 @@ public final class InsertNode extends DMLModStatementNode {
                 Double.parseDouble(targetProperties.getProperty(SAMPLE_FRACTION)) : 0;
         indexName = targetProperties.getProperty(INDEX_NAME);
         String failBadRecordCountString = targetProperties.getProperty(BAD_RECORDS_ALLOWED);
-        Boolean pin = Boolean.parseBoolean(targetProperties.getProperty(PIN));
-        if(pin){
-            throw StandardException.newException(SQLState.INSERT_PIN_VIOLATION);
-        }
         String skipConflictDetectionString = targetProperties.getProperty(SKIP_CONFLICT_DETECTION);
         String skipWALString = targetProperties.getProperty(SKIP_WAL);
 

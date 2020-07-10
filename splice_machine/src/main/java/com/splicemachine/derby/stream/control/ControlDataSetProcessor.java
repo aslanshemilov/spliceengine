@@ -363,27 +363,9 @@ public class ControlDataSetProcessor implements DataSetProcessor{
     }
 
     @Override
-    public <V> DataSet<V> readPinnedTable(long conglomerateId,int[] baseColumnMap, String location, OperationContext context, Qualifier[][] qualifiers, DataValueDescriptor probeValue, ExecRow execRow) throws StandardException {
-        DistributedDataSetProcessor proc = EngineDriver.driver().processorFactory().distributedProcessor();
-        return new ControlDataSet(proc.readPinnedTable(conglomerateId, baseColumnMap, location, context, qualifiers, probeValue,execRow).toLocalIterator());
-    }
-
-    @Override
-    public void dropPinnedTable(long conglomerateId) throws StandardException {
-        DistributedDataSetProcessor proc = EngineDriver.driver().processorFactory().distributedProcessor();
-        proc.dropPinnedTable(conglomerateId);
-    }
-
-    @Override
     public void createEmptyExternalFile(StructField[] fields, int[] baseColumnMap, int[] partitionBy, String storageAs, String location, String compression) throws StandardException {
         DistributedDataSetProcessor proc = EngineDriver.driver().processorFactory().distributedProcessor();
         proc.createEmptyExternalFile(fields,baseColumnMap,partitionBy,storageAs,location, compression);
-    }
-
-    @Override
-    public void refreshTable(String location) {
-        DistributedDataSetProcessor proc = EngineDriver.driver().processorFactory().distributedProcessor();
-        proc.refreshTable(location);
     }
 
     @Override
@@ -392,12 +374,6 @@ public class ControlDataSetProcessor implements DataSetProcessor{
         return proc.getExternalFileSchema(storedAs,location,mergeSchema);
     }
 
-    @Override
-    public Boolean isCached(long conglomerateId) throws StandardException {
-        DistributedDataSetProcessor proc = EngineDriver.driver().processorFactory().distributedProcessor();
-        return proc.isCached(conglomerateId);
-    }
-    
     @Override
     public TableChecker getTableChecker(String schemaName, String tableName, DataSet table,
                                         KeyHashDecoder tableKeyDecoder, ExecRow tableKey, TxnView txn, boolean fix,
