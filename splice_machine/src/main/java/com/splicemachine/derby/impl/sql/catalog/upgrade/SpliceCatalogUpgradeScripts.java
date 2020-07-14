@@ -58,15 +58,6 @@ public class SpliceCatalogUpgradeScripts{
             }
         };
         scripts=new TreeMap<>(ddComparator);
-        scripts.put(new Splice_DD_Version(sdd,1,0,0),new UpgradeScriptForFuji(sdd,tc));
-        scripts.put(new Splice_DD_Version(sdd,1,1,1),new LassenUpgradeScript(sdd,tc));
-        scripts.put(new Splice_DD_Version(sdd,2,6,0),new UpgradeScriptFor260(sdd,tc));
-        scripts.put(new Splice_DD_Version(sdd,2,8,1), new UpgradeScriptForModifySchemaPermissionAndDefaultRole(sdd,tc));
-        scripts.put(new Splice_DD_Version(sdd,2,8,0, 1812), new UpgradeScriptToCleanSysRoutinePerms(sdd,tc));
-        scripts.put(new Splice_DD_Version(sdd,2,8,0, 1817), new UpgradeScriptForSysTokens(sdd,tc));
-        scripts.put(new Splice_DD_Version(sdd,2,8,0, 1842), new UpgradeScriptForDroppedConglomerates(sdd,tc));
-        scripts.put(new Splice_DD_Version(sdd,2,8,0, 1849), new UpgradeScriptToRemoveFKDependencyOnPrivileges(sdd,tc));
-        scripts.put(new Splice_DD_Version(sdd,2,8,0, 1851), new UpgradeScriptToAddUseExtrapolationInSysColumns(sdd,tc));
         scripts.put(new Splice_DD_Version(sdd,2,8,0, 1901), new UpgradeScriptToRemoveUnusedBackupTables(sdd,tc));
         scripts.put(new Splice_DD_Version(sdd,2,8,0, 1909), new UpgradeScriptForReplication(sdd, tc));
         scripts.put(new Splice_DD_Version(sdd,2,8,0, 1917), new UpgradeScriptForMultiTenancy(sdd,tc));
@@ -107,5 +98,9 @@ public class SpliceCatalogUpgradeScripts{
             UpgradeScript script=scripts.get(version);
             script.run();
         }
+
+        // Always update system procedures and stored statements
+        sdd.createOrUpdateAllSystemProcedures(tc);
+        sdd.updateMetadataSPSes(tc);
     }
 }
